@@ -6,7 +6,7 @@ now = datetime.now()
 
 
 # La fonction d'affichage de l'application
-def affichage_application(): # Test de cette fonction :
+def affichage_application():
 	print("\n")
 	print(35*"-")
 	print(3*":"+"\t"+"Parking de véhicule"+"\t"+3*":")
@@ -17,7 +17,7 @@ def affichage_application(): # Test de cette fonction :
 	print("0. Quitter l'application")
 	print(f"La date actuelle est : {now}")
 
-	choix = eval(input(" - Saisissez un chiffre ( 1 ou 0 ) : "))
+	choix = input(" - Saisissez un chiffre ( 1 ou 0 ) : ")
 	choix_menu(choix)
 
 
@@ -25,7 +25,7 @@ def affichage_application(): # Test de cette fonction :
 
 # La fonction pour le paiement du ticket et impression du ticket
 def paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now):
-	print(" --- Création du ticket --- ") # Test de la fonction :
+	print(" --- Création du ticket --- ")
 
 	print("\n")
 	print(" * Vérifiez les informations * ")
@@ -40,7 +40,7 @@ def paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix
 	verif_information = input("Est ce que vos informations sont correctes (Oui ou Non) : ")
 
 	if verif_information.lower() == "oui":	
-		id_ticket = f"{pseudo}{choix_abonne}{place_one}{now}"
+		num_ticket = f"{pseudo}{choix_abonne}{place_one}{now}"
 		if type(numero_tel) == int:
 			with open(f"tickets/ticket{now}.log", mode="w", encoding="utf-8") as ticket:
 				ticket.write(f"\n")
@@ -48,7 +48,7 @@ def paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix
 				ticket.write(3*":"+3*"\t"+"Parking de véhicule"+3*"\t"+3*":"+"\n")
 				ticket.write(44*"-")
 				ticket.write(f"\n")
-				ticket.write(f"ID du ticket : {id_ticket}")
+				ticket.write(f"N° du ticket : {num_ticket}")
 				ticket.write(f"\n")
 				ticket.write(f"Pseudo : {pseudo}")
 				ticket.write(f"\n")
@@ -125,31 +125,32 @@ def choix_menu(choix): # Teste de cette fonction :
 	print(" ----- Choix des abonnements ----- ")
 
 	# --- Pour la partie des abonnements ---
-	if choix == 1 and type(choix) == int:
+	if choix == '1':
 		print("1. Abonnement classique")
 		print("2. Abonnement standard")
 		print("3. Abonnement premium")
 		print("0. Sortir de l'application")
-		choix_abonne = eval(input("Faites un choix de votre abonnement : "))
+		choix_abonne = input("Faites un choix de votre abonnement : ")
 
 		# Appelle de la fonction pour le choix de l'abonnement
 		choix_abonnement(choix_abonne)
 
-	elif choix == 0 and type(choix) == int:
-		print(" Attention : vous avez quitté l'application --- ")
+	elif choix == '0':
+		print(" Attention : vous avez quitté l'application")
 		exit()
 	else:
-		print("Erreur : réessayez")
+		print("Erreur : reéssayez")
+		exit()
 
 
 
 
 # Fonction pour le choix de l'abonnement
-def choix_abonnement(choix_abonne): # Test de cette fonction : 
+def choix_abonnement(choix_abonne):
 	print(" ----- Le choix de votre place ----- ")
 
 	# Les conditions pour la partie des abonnements
-	if choix_abonne == 1 and type(choix_abonne) == int:
+	if choix_abonne == '1':
 
 		# Nommination de la partie classique
 		choix_abonne_name = "Classique"
@@ -162,13 +163,13 @@ def choix_abonnement(choix_abonne): # Test de cette fonction :
 		print("Place 4 : 20.000 FCFA / mois")
 		print("Place 5 : 25.000 FCFA / mois")
 		print("Saisissez 99 pour sortir de l'application")
-		place_one = eval(input("Entrez la place que vous souhaitez : "))
+		place_one = input("Entrez la place que vous souhaitez : ")
 
 		# Vérification des éléments et lancement de la création du ticket
 		verification_tickets(place_one, choix_abonne, choix_abonne_name)
 
 
-	elif choix_abonne == 2 and type(choix_abonne) == int:
+	elif choix_abonne == '2':
 
 		# Nommination de la partie standard
 		choix_abonne_name = "Standard"
@@ -180,12 +181,12 @@ def choix_abonnement(choix_abonne): # Test de cette fonction :
 		print("Place 8 : 60.000 FCFA / mois")
 		print("Saisissez 99 pour sortir de l'application")
 
-		place_one = eval(input("Entrez la place que vous souhaitez : "))
+		place_one = input("Entrez la place que vous souhaitez : ")
 
 		# Vérification des éléments et lancement de la création du ticket
 		verification_tickets(place_one, choix_abonne, choix_abonne_name)
 
-	elif choix_abonne == 3 and type(choix_abonne) == int:
+	elif choix_abonne == '3':
 
 		# Nommination de la partie premium
 		choix_abonne_name = "Premium"
@@ -196,12 +197,12 @@ def choix_abonnement(choix_abonne): # Test de cette fonction :
 		print(" Place 10 : 70.000 FCFA / mois")
 		print("Saisissez 99 pour sortir de l'application")
 
-		place_one = eval(input("Entrez la place que vous souhaitez : "))
+		place_one = input("Entrez la place que vous souhaitez : ")
 
 		# Vérification des éléments et lancement de la création du ticket
 		verification_tickets(place_one, choix_abonne, choix_abonne_name)
 
-	elif choix_abonne == 0 and type(choix_abonne) == int:
+	elif choix_abonne == '0':
 		print(" * Attention : vous êtes sorti de l'application * ")
 		exit()
 
@@ -217,7 +218,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 	print(" ----- Fonction pour le choix de la place ---- ")
 
 	#pseudo = eval(input(" - Entrez votre pseudo :"))
-	if place_one == 1 and type(place_one) == int:
+	if place_one == '1':
 		print(" --- Vous avez choisi la place 1 --- ")
 		prix = 5000
 
@@ -233,7 +234,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
 
-	elif place_one == 2 and type(choix_abonne) == int:
+	elif place_one == '2':
 		print(" --- Vous avez choisi la place 2 --- ")
 		print(" * 10.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -246,7 +247,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Création du ticker et son impression
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 3 and type(choix_abonne) == int:
+	elif place_one == '3':
 		print(" --- Vous avez choisi la place 3 --- ")
 		print(" * 15.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -259,7 +260,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Création du ticket et son impression
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 4 and type(choix_abonne) == int:
+	elif place_one == '4':
 		print(" --- Vous avez choisi la place 4 --- ")
 		print(" * 20.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -272,7 +273,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Création du ticket et de son impression physique pour le client
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 5 and type(choix_abonne) == int:
+	elif place_one == '5':
 		print(" --- Vous avez choisi la place 5 --- ")
 		print(" * 25.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -285,7 +286,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Ajout de la partie pour la création et l'impression du ticket
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 6 and type(choix_abonne) == int:
+	elif place_one == '6':
 		print(" --- Vous avez choisi la place 6 --- ")
 		print(" * 50.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -298,7 +299,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Ajout de la partie pour la création et l'impression du ticket de parking
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 7 and type(choix_abonne) == int:
+	elif place_one == '7':
 		print(" --- Vous avez choisi la place 7 --- ")
 		print(" * 55.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -311,7 +312,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Ajout de la partie de la création du ticket pour le parking et pour l'impression du ticket
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 8 and type(choix_abonne) == int:
+	elif place_one == '8':
 		print(" --- Vous avez choisi la place 8 --- ")
 		print(" * 60.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -324,7 +325,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Appel de la partie de la création et de l'impression du ticket
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 9 and type(choix_abonne) == int:
+	elif place_one == '9':
 		print(" --- Vous avez choisi la place 9 --- ")
 		print(" * 65.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -337,7 +338,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Appel de la partie de la création et de l'impression du ticket de parking
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 10 and type(choix_abonne) == int:
+	elif place_one == '10':
 		print(" --- Vous avez choisi la place 10 --- ")
 		print(" * 70.000 FCFA / mois * ")
 		print("Paiement au niveau du guichet")
@@ -350,7 +351,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		# Appel de la fonction pour l'impression du ticket pour le parking
 		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 
-	elif place_one == 99 and type(choix_abonne) == int:
+	elif place_one == '99':
 		print("Attention : vous avez quitté l'application --- ")
 		exit()
 
