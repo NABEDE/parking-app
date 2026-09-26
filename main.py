@@ -1,8 +1,131 @@
 from datetime import datetime, date
+import subprocess
  
 # --- Application de parking en langage python ---
 now = datetime.now()
 
+
+# La partie de suppresion des tickets
+def deleting_tickets():
+	commande = ["sudo rm -r -f", "/tickets/ticket*"]
+	result = subprocess.run(commande, capture_output=True)
+	print(result.stdout.decode("utf-8"))
+
+
+# La liste des admins de base
+info_admin_actuel = []
+
+# Partie des administrateurs
+def connexion_administrateur(pseudo, code_connexion):
+	liste_compte_ligne = []
+
+	# Vérification des informations de l'administrateur
+	with open(f"compte-admin/compte_admins.log", mode="r", encoding="utf-8") as info_admin:
+		for ligne in info_admin:
+			liste_compte_ligne.append(ligne.strip())
+
+	if (pseudo in list(liste_compte_ligne)) == True: 
+		if (code_connexion in list(liste_compte_ligne)) == True:
+			print("\n")
+			print(5*"-")
+			print(" * Vous êtes connecté à votre compte Admin * ")
+			print(f"Votre pseudo est (4 éléments) : {pseudo}")
+			print(f"Votre code de connexion est (4 éléments) : {code_connexion}")
+			print(5*"-"+"\n")
+
+			# La liste des admins de base
+			global info_admin_actuel
+			info_admin_actuel = [pseudo, code_connexion]
+			#print(f"Administrateur actuel : {info_admin_actuel}")
+
+			# Ajouter les actions à faire
+			affichage_admin_action()
+
+		else:
+			print(f"Erreur : votre code de connexion {code_connexion} ne correspond à aucun code")
+	else:
+		print(f"Erreur : Votre pseudo {pseudo} ne correspond à aucun pseudo")
+
+
+
+# Parties des administrateurs
+# Les conditions de la partie administrateur
+def condition_choix_administrateur(choix_administrateur):
+	if choix_administrateur == "1":
+		print(" --- Création d'un compte de l'administrateur --- ")
+		
+		# Entrez des informations pour l'administrateur		
+		pseudo = input("Entrez votre pseudo : ")
+		code_connexion = input("Entrez votre code de connexion : ")
+
+		# Condition de la partie du code_connexion
+		code_connexion_list = list(code_connexion)
+		if len(code_connexion_list) != 4:
+			print("Erreur : votre code de connexion ne doit pas dépasser 4 facteurs")
+			print("Exemple de ce qui est correct : 0000 ou JKL8")
+			print("Reéssayez")
+			exit()
+		print("\n")
+		print(f" -- Confirmation de vos identifiants de connexion -- ")
+		print(f"Votre pseudo : {pseudo}")
+		print(f"Votre code de connexion : {code_connexion}")
+		print(f" --")
+		print("\n")
+
+		confirmation_information_client = input("Est ce que vos informations sont correctes ? (Oui ou Non) :")
+
+		if confirmation_information_client.lower() == "oui":
+			print("Vous avez confirmé que vos informations sont correctes!")
+
+			# Ajout des informations de l'administrateur dans un fichier
+			enregistrement_informations_admin(pseudo, code_connexion)
+
+		elif confirmation_information_client.lower() == "non":
+			print("Attention : vos informations ne sont pas correct, réessayez!")
+			exit()
+
+	elif choix_administrateur == "2":
+		print(" --- Connexion à votre compte en tant que administrateurs --- ")
+		pseudo = input("Entrez votre pseudo : ")
+		code_connexion = input("Entrez votre code de connexion : ")
+		connexion_administrateur(pseudo, code_connexion)
+
+	elif choix_administrateur == "3":
+		print(" --- Suppression des anciens tickets --- ")
+		reponse = input("Est ce que c'est le système Linux ? : ")
+
+		if reponse.lower() == "oui":
+			commande_suppression_ticket()
+		elif reponse.lower() == "non":
+			print("Attention : vous n'utilisez pas un système Linux")
+		else:
+			print("Erreur : reéssayez")
+
+		commande = ["sudo rm -r -f"]
+
+
+	elif choix_administrateur == "99":
+		print("Attention : vous avez quitté l'applicarion")
+		exit()
+
+	# Partie innachevée
+
+
+# Partie Administrateur
+
+
+
+# La liste des administrateurs disponibles dans la partie des données
+def list_admins_base():
+	list_admin_dispo_base = []
+	with open(f"compte-admin/compte_admins.log", mode="r", encoding="utf-8") as admin_dispo_base:
+		for admin_element_base in admin_dispo_base:
+			list_admin_dispo_base.append(admin_element_base.strip())
+	#print(f"La liste des administrateurs actuellement{list_admin_dispo_base}")
+	return list_admin_dispo_base
+
+# Extraction des éléments
+list_admins_elements_dispo = list_admins_base()
 
 
 # La fonction d'affichage de l'application
@@ -14,10 +137,12 @@ def affichage_application():
 	print("\n")
 	print(" --- Bienvenu sur notre application de parking --- ")
 	print("1. Acheter le ticket")
+	print("2. Compte Administration")
 	print("0. Quitter l'application")
 	print(f"La date actuelle est : {now}")
+	#print(list_admins_elements_dispo)
 
-	choix = input(" - Saisissez un chiffre ( 1 ou 0 ) : ")
+	choix = input(" - Saisissez un chiffre ( 0 à 2 ) : ")
 	choix_menu(choix)
 
 
@@ -42,10 +167,10 @@ def paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix
 	if verif_information.lower() == "oui":	
 		num_ticket = f"{pseudo}{choix_abonne}{place_one}{now}"
 		if type(numero_tel) == int:
-			with open(f"tickets/ticket{now}.log", mode="w", encoding="utf-8") as ticket:
+			with open(f"tickets/ticket-vente1.log", mode="w", encoding="utf-8") as ticket:
 				ticket.write(f"\n")
 				ticket.write(44*"-"+"\n")
-				ticket.write(3*":"+3*"\t"+"Parking de véhicule"+3*"\t"+3*":"+"\n")
+				ticket.write(3*":"+3*"\t"+"Parking de véhicule"+"\n")
 				ticket.write(44*"-")
 				ticket.write(f"\n")
 				ticket.write(f"N° du ticket : {num_ticket}")
@@ -68,7 +193,7 @@ def paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix
 
 				print(" * Votre ticket a été créé avec succès * ")
 				print("\n")
-				with open(f"tickets/ticket{now}.log", mode="r", encoding="utf-8") as ticket_file:
+				with open(f"tickets/ticket-vente1.log", mode="r", encoding="utf-8") as ticket_file:
 					for line in ticket_file:
 						print(line.strip())
 						print("\n")
@@ -109,10 +234,9 @@ def verification_tickets(place_one, choix_abonne, choix_abonne_name): # Teste de
 			print("Attention : Cette place est déjà occupé, changez une nouvelle place - ")
 			exit()
 		else:
-			print("Attention : Cette place est libre - ")
+			print("Attention : Cette place est libre")
 
 			# Appelle de la fonction choix de la place abonnement et de la partie du ticket
-			print("Je suis dans la partie du choix de l'abonnement !")
 			choix_place_abonnement(place_one, choix_abonne, choix_abonne_name)
 
 			# Enregistré le ticket dans le fichier log
@@ -135,6 +259,10 @@ def choix_menu(choix): # Teste de cette fonction :
 		# Appelle de la fonction pour le choix de l'abonnement
 		choix_abonnement(choix_abonne)
 
+	# --- Pour la partie des administrateurs ---
+	elif choix == "2":
+		partie_administrateurs(choix)
+
 	elif choix == '0':
 		print(" Attention : vous avez quitté l'application")
 		exit()
@@ -144,7 +272,7 @@ def choix_menu(choix): # Teste de cette fonction :
 
 
 
-
+# Partie des administrateurs
 # Fonction pour le choix de l'abonnement
 def choix_abonnement(choix_abonne):
 	print(" ----- Le choix de votre place ----- ")
@@ -211,6 +339,223 @@ def choix_abonnement(choix_abonne):
 
 
 
+# Partie des administrateurs
+# La fonction pour la partie des administrateurs
+def partie_administrateurs(choix_partie_administrateur):
+	liste_admins = []
+	# Création d'un administrateur par defaut au niveau de la partie administration
+	with open(f"compte-admin/compte_admins.log", mode="r", encoding="utf-8") as reading_admins:
+		for reading_admin in reading_admins:
+			element_reading_admin = reading_admin.strip()
+			liste_admins.append(element_reading_admin)
+
+
+	if ('KLIO*' in liste_admins) == False:
+		with open(f"compte-admin/compte_admins.log", mode="a", encoding="utf-8") as ajout_admin:
+			ajout_admin.write("KLIO*\n")
+			ajout_admin.write("KLIO\n")
+			ajout_admin.write(5*"-")
+			print("***")
+
+
+	print(" --- Bienvenu dans la partie des administrateurs --- ")
+	print("1. Créer un compte administrateur")
+	print("2. Se connecter")
+	print("99. Quitter l'application")
+
+	choix_administrateur = input("Entrez le numéro de votre choix : ")
+	condition_choix_administrateur(choix_administrateur)
+
+	# Partie innachevée
+
+
+
+# Ajouter les informations de l'administrateurs pour son compte
+def ajout_information_administrateur():
+	print(" --- Ajouter les informations --- ")
+
+	# Entrez des informations pour l'administrateur		
+	pseudo = input("Entrez votre pseudo (4 éléments) : ")
+	code_connexion = input("Entrez votre code de connexion (4 éléments) : ")
+
+
+	# Condition de la partie du code_connexion
+	code_connexion_list = list(code_connexion)
+	if len(code_connexion_list) != 4:
+		print("Erreur : votre code de connexion ne doit pas dépasser 4 facteurs")
+		print("Exemple de ce qui est correct : 0000 ou JKL8")
+		print("Reéssayez")
+		exit()
+	print("\n")
+	print(f" -- Confirmation de vos identifiants de connexion -- ")
+	print(f"Votre pseudo : {pseudo}")
+	print(f"Votre code de connexion : {code_connexion}")
+	print(f" --")
+	print("\n")
+
+	confirmation_information_client = input("Est ce que vos informations sont correctes ? (Oui ou Non) :")
+
+	if confirmation_information_client.lower() == "oui":
+		print("Vous avez confirmé que vos informations sont correctes!")
+
+		# Ajout des informations de l'administrateur dans un fichier
+		enregistrement_informations_admin(pseudo, code_connexion)
+
+	elif confirmation_information_client.lower() == "non":
+		print("Attention : vos informations ne sont pas correct, réessayez!")
+		exit()
+
+
+
+
+
+# Suppression d'un compte d'un administrateur
+def deleting_admin_account():
+
+	# Affichage des informations de l'administrateur en cours d'utilisation
+	#print(f"l'administrateur actuel : {info_admin_actuel}")
+
+	list_file_log_admin = []
+	pseudo_admin_supp = input("Entrez le pseudo de l'administrateur à supprimer : ")
+	code_connexion_supp = input("Entrez le code de connexion de l'administrateur à supprimer : ")
+
+	with open(f"compte-admin/compte_admins.log", mode="r", encoding="utf-8") as admin_supp:
+		for ligne_element in admin_supp:
+			admin_supp_content = ligne_element.strip()
+			list_file_log_admin.append(admin_supp_content)
+
+	if (str(pseudo_admin_supp) in info_admin_actuel) == False:
+		if(str(code_connexion_supp) in info_admin_actuel) == False:
+			if len(list_file_log_admin) != 0:
+
+				# Condition de vérification des informations de l'administrateur
+				if (str(pseudo_admin_supp) in list(list_file_log_admin)) == True:
+					if (str(code_connexion_supp) in list(list_file_log_admin)) == True:
+						with open(f"compte-admin/compte_admins.log", mode="w", encoding="utf-8") as nouveau_log_admin:
+							if (str(pseudo_admin_supp) in list_file_log_admin) == True:
+								print(f"Le pseudo à supprimer : {pseudo_admin_supp}")
+								list_file_log_admin.remove(pseudo_admin_supp)
+								if (str(code_connexion_supp) in list_file_log_admin) == True:
+									print(f"Le code à supprimer : {code_connexion_supp}")
+									list_file_log_admin.remove(code_connexion_supp)
+
+									if (5*"-" in list_file_log_admin) == True:
+										list_file_log_admin.remove(5*"-")
+
+									# Remplissage des informations de l'administrateur dans le fichier des administrateurs	
+									for element in list_file_log_admin:
+										if element != '':
+											nouveau_log_admin.write(element)
+											nouveau_log_admin.write("\n")
+									print("Succès : le compte de l'administrateur a été supprimé avec succès.")
+
+								else:
+									print("Erreur : aucun administrateur avec ce code de connexion")
+									print("Réessayez !")
+
+							else:
+								print("Erreur : aucun administrateur avec ce pseudo")
+								print("Réessayez !")
+
+					else:
+						print("Erreur : aucun administrateur avec ce code de connexion")
+
+				else:
+					print("Erreur : aucun administrateur avec ce pseudo de connexion")
+			else:
+				print("Erreur : le fichier des admins n'existe pas")
+		else:
+			print("Erreur : le code de connexion est le vôtre")
+	else:
+		print("Erreur : le pseudo de connexion est le vôtre")
+
+
+
+
+
+
+# Création de la fonction pour la partie admin
+def execution_choix_admin(choix_admin):
+
+	if choix_admin == "1":
+		print(" --- Ajout d'un administrateur --- ")
+		# Ajout des informations
+		ajout_information_administrateur()
+
+	elif choix_admin == "2":
+		print(" --- Suppression du compte d'un administrateur --- ")
+		# Suppression du compte d'un administrateur
+		deleting_admin_account()
+
+	elif choix_admin == "3":
+		print(" --- Suppression des anciens tickets --- ")
+		# Suppression des fichiers des anciens tickets
+		deleting_tickets() # cette fonction est en cours de construction
+
+	elif choix_admin == "4":
+		print(" --- Afficher les administeurs disponibles --- ")
+		#afficher_administrateurs() # fonction en cours de construction
+
+	elif choix_admin == "99":
+		print("Attention : attention vous avez quitté l'application!")
+		exit()
+
+
+
+# Les actions des admins
+def affichage_admin_action():
+	print("1. Ajouter un administrateur")
+	print("2. Supprimer un administrateur")
+	print("3. Supprimer les anciens tickets")
+	print("4. Afficher les administeurs disponibles")
+	print("99.Se déconnecter en tant qu'admin")
+
+	choix_admin = input("Choisissez un numéro qui vous convient : ")
+	execution_choix_admin(choix_admin)
+
+
+
+	# [ Partie innachevée dans le top ]
+
+
+
+# La fonction pour la création des comptes des administrateurs
+def enregistrement_informations_admin(pseudo, code_connexion):
+
+	liste_compte_ligne = []
+	print(" --- Enregistrement des informations de l'administrateur --- ")
+
+	# Changement des éléments de type pour les informations des administrateurs
+
+
+	# Vérification des informations de l'administrateur
+	with open(f"compte-admin/compte_admins.log", mode="r", encoding="utf-8") as info_admin:
+		for ligne in info_admin:
+			liste_compte_ligne.append(ligne.strip())
+
+
+	# Ajout de la partie des informations des administrateur dans la partie des logs
+	for element in liste_compte_ligne:
+		if str(element) == str(pseudo):
+			print("Erreur : il existe un compte qui est déjà au même pseudo")
+			if str(element) == str(code_connexion):
+				print("Erreur : il existe un compte qui est déjà au même code de connexion")
+				exit()
+			exit()
+
+	# Enregistrement du compte de l'administrateur
+	with open(f"compte-admin/compte_admins.log", mode="a", encoding="utf-8") as info_compte:
+		#info_compte.write(5*"-")
+		info_compte.write("\n")
+		info_compte.write(f"{pseudo}\n")
+		info_compte.write(f"{code_connexion}\n")
+		info_compte.write(5*"-")
+		info_compte.write("\n")
+	print(" --- Votre compte a été créé avec succès --- ")
+
+	# Partie innachevée 1
+
+
 
 
 # La fonction pour le choix de la place et de l'abonnement
@@ -228,10 +573,26 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Informations à ajouter
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
 
-		# Création du ticket et de son impression
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		# `[Partie Innachevée]`
+
+		numero_tel = input("Entrez votre numéro de téléphone : ")
+
+		if (type(numero_tel) == str and int(numero_tel) == int) != True:
+			print("Erreur : le numéro de téléphone est mal formaté")
+			print("Réessayez")
+
+		elif (type(numero_tel) == str and int(numero_tel) == int) == True:
+			print(" -- Numéro bien formater --")
+			# Création du ticket et de son impressio
+			paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
+		# `[Partie Innachevée]`
 
 
 	elif place_one == '2':
@@ -242,10 +603,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations du client
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Création du ticker et son impression
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '3':
 		print(" --- Vous avez choisi la place 3 --- ")
@@ -255,10 +623,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations du client
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Création du ticket et son impression
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '4':
 		print(" --- Vous avez choisi la place 4 --- ")
@@ -268,10 +643,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des information du client pour la création du ticket
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Création du ticket et de son impression physique pour le client
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '5':
 		print(" --- Vous avez choisi la place 5 --- ")
@@ -281,10 +663,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations supplémentaires au niveau du ticket
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Ajout de la partie pour la création et l'impression du ticket
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '6':
 		print(" --- Vous avez choisi la place 6 --- ")
@@ -294,10 +683,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations supplémentaires au niveau du ticket du parking
 		pseudo = input("Entrez votre pseudo :")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Ajout de la partie pour la création et l'impression du ticket de parking
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '7':
 		print(" --- Vous avez choisi la place 7 --- ")
@@ -309,8 +705,15 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
 
-		# Ajout de la partie de la création du ticket pour le parking et pour l'impression du ticket
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '8':
 		print(" --- Vous avez choisi la place 8 --- ")
@@ -320,10 +723,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations du client pour le véhicule
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Appel de la partie de la création et de l'impression du ticket
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '9':
 		print(" --- Vous avez choisi la place 9 --- ")
@@ -333,10 +743,17 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Ajout des informations pour le client
 		pseudo = input("Entrez votre pseudo : ")
-		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
+		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		# Appel de la partie de la création et de l'impression du ticket de parking
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '10':
 		print(" --- Vous avez choisi la place 10 --- ")
@@ -348,8 +765,15 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
 
-		# Appel de la fonction pour l'impression du ticket pour le parking
-		paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
+		else:
+			#Création de la partie qui ne pas fait pas parti de la condition
+			print("Votre numéro de téléphone n'est pas correct !")
+			print("Réessayez")
+
 
 	elif place_one == '99':
 		print("Attention : vous avez quitté l'application --- ")

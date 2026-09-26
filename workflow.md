@@ -1,5 +1,5 @@
 ## Dernière étape :
 
-- Teste de la fonction "affichage_application()"
-- Teste de la fonction "paiement_impression_ticket()"
-- Test de la fonction "..."
+- Modifier la partie de des numéro de téléphone lorsque l'utilisateur vas saisir ses informations.
+
+- Faire des modifications au niveau de du type du fichier des ticket, pour avoir un type pdf dans la mesure du possible.
