@@ -88,7 +88,103 @@ Cette application possède des fonctionnalités qui sont très utilisées dans l
 
 --
 
-## 6. 
+## 6. Présentation des fonctionalités de façon pratique de l'application
+
+Dans cette application, on peut facilement remarquer les différentes parties de lancement de l'application. Vous aurez le droit de rentrer dans le dossier principal, si vous êtes sur le système `Linux`, tapez seulement cette commande : `cd parking-app`
+
+Vous allez remarquer un fichier `Bash` qu'on appelle `setup.sh`, après cette remarque, il faut saisir ces deux commandes si l'une ne fonctionne pas, il faut saisir l'autre.
+
+Assurez vous d'avoir le setup du langage `Bash` installé sur votre système.
+
+### Les commandes de lancement :
+
+- Première commande : `./setup.sh`
+Cette commande permet de lancer le setup global de l'application.
+Dans la mesure du possible également, assurez vous que vous avez une bonne version de lanceur python, une version `python 3.11`, avec cette version, vous aurez la possibilité de lancer l'application en toute règle.
+Si cette commande ne fonctionne pas, utiliser cette commande.
+
+- Deuxième commande : `bash setup.sh`
+Cette commande permet d'utiliser le lanceur bash pour exécuter le `setup.sh` en utilisant directement le lanceur bash pour que cela puisse fonctionner en un coup sûr. Dans un cas extrême, dans un élément électronique pour l'impression des tickets qui sont en log. De ce fait, je vous recommande d'avoir de base l'élément `bash` installé ou à jour ensuite l'élément `python` installé ou à jour.
+
+Dans un cas extrême si les deux commandes ne fonctionnent pas, il faut utiliser cette commande.
+
+- Troisième commande : `python3 main.py`
+Cette commande permet de lancer le main de l'application que j'ai eu à créer. Cette commande permet de lancer le main.py qui est le noyau de l'application. De ce fait, je vous recommande d'avoir au préalable le setup du langage python à jour, sous cette version `python 3.9` ou `python 3.11`.
+
+Après avoir ouvert le setup de l'application, on aura la possibilité de voir un menu bien structuré.
+
+### La structure de l'application et ses fonctions
+
+Nous avons les différentes structurées sous cette forme :
+
+-----------------------------------
+::: Parking de véhicule :::
+-----------------------------------
+
+
+ --- Bienvenu sur notre application de parking --- 
+1. Acheter le ticket
+2. Compte Administration
+0. Quitter l'application
+La date actuelle est : 2026-10-01 09:19:48.469958
+ - Saisissez un chiffre ( 0 à 2 ) :
+
+
+- Nous avons le menu, au niveau du menu, nous avons l'achat de ticket sous cette forme : `1. Acheter le ticket`
+
+- La partie du compte administrateur sous cette forme : `2. Compte Administration` 
+
+- La partie pour quitter l'application complètement sous cette forme : `0. Quitter l'application`
+
+- La partie de la date du jour sous cette forme : `La date actuelle est : 2026-10-01 09:19:48.469958`
+
+Comme vous allez le remarquer le terminal ou bien l'élément électronique va donner la main pour écrire un chiffre pour faire un choix.
+
+Exemple : `1` pour passer à l'achat du ticket pour le parking.
+Ou `2` pour passer à la partie des comptes administrateurs.
+
+Au niveau de l'achat du ticket, vous avez les éléments d'un autre menu sous cette forme :
+
+
+----- Choix des abonnements ----- 
+1. Abonnement classique
+2. Abonnement standard
+3. Abonnement premium
+0. Sortir de l'application
+Faites un choix de votre abonnement :
+
+Vous allez choisir un numéro pour acheter un abonnement au ticket.
+
+Si vous choisissez `1. Abonnement classique`, vous aurez cette structure sous cette forme.
+
+ ----- Le choix de votre place ----- 
+ --- Bienvenu dans le choix de l'abonnement classique --- 
+Place 1 : 5000 FCFA / mois
+Place 2 : 10.000 FCFA / mois
+Place 3 : 15.000 FCFA / mois
+Place 4 : 20.000 FCFA / mois
+Place 5 : 25.000 FCFA / mois
+Saisissez 99 pour sortir de l'application
+Entrez la place que vous souhaitez : 
+
+Vous allez choisir la place `1` par exemple pour faire l'achat du ticket.
+
+Vous aurez problamenent un ticket sous cette forme.
+
+--------------------------------------------
+:::         Parking de véhicule
+--------------------------------------------
+N° du ticket : JEROME112026-09-24 13:43:55.571407
+Pseudo : JEROME
+Numéro de téléphone : 72336147
+Abonnement choisi : Classique 1
+Place choisit : Place 1
+Le prix du ticket : 5000 FCFA
+Paiement au niveau du Guichet
+La date actuelle : 2026-09-24 13:43:55.571407
+--------------------------------------------
+
+Après avois enregistré vos informations pour l'achat du ticket, les informations que vous souhaitez que ça soit visible.
 
 `[Innachevé]` -> `[Faire un git commit à la fin des modification et faire un push à la fin]`
 

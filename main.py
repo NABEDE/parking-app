@@ -487,15 +487,6 @@ def execution_choix_admin(choix_admin):
 		# Suppression du compte d'un administrateur
 		deleting_admin_account()
 
-	elif choix_admin == "3":
-		print(" --- Suppression des anciens tickets --- ")
-		# Suppression des fichiers des anciens tickets
-		deleting_tickets() # cette fonction est en cours de construction
-
-	elif choix_admin == "4":
-		print(" --- Afficher les administeurs disponibles --- ")
-		#afficher_administrateurs() # fonction en cours de construction
-
 	elif choix_admin == "99":
 		print("Attention : attention vous avez quitté l'application!")
 		exit()
@@ -506,8 +497,6 @@ def execution_choix_admin(choix_admin):
 def affichage_admin_action():
 	print("1. Ajouter un administrateur")
 	print("2. Supprimer un administrateur")
-	print("3. Supprimer les anciens tickets")
-	print("4. Afficher les administeurs disponibles")
 	print("99.Se déconnecter en tant qu'admin")
 
 	choix_admin = input("Choisissez un numéro qui vous convient : ")
@@ -573,26 +562,18 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 
 		# Informations à ajouter
 		pseudo = input("Entrez votre pseudo : ")
-
-		# `[Partie Innachevée]`
-
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
-		if (type(numero_tel) == str and int(numero_tel) == int) != True:
-			print("Erreur : le numéro de téléphone est mal formaté")
-			print("Réessayez")
-
-		elif (type(numero_tel) == str and int(numero_tel) == int) == True:
-			print(" -- Numéro bien formater --")
-			# Création du ticket et de son impressio
-			paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
-
+		# Condition d'acceptation du numéro de téléphone
+		if type(numero_tel) == str:
+			if int(numero_tel) == int:
+				# Création du ticket et de son impression
+				paiement_impression_ticket(numero_tel, choix_abonne_name, choix_abonne, prix, place_one, pseudo, now)
 		else:
 			#Création de la partie qui ne pas fait pas parti de la condition
 			print("Votre numéro de téléphone n'est pas correct !")
 			print("Réessayez")
 
-		# `[Partie Innachevée]`
 
 
 	elif place_one == '2':
@@ -605,6 +586,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de condition pour l'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -625,6 +607,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de la condition de l'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -645,6 +628,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de condition d'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -665,6 +649,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# La partie de la condition d'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -685,6 +670,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo :")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de la condition d'acceptation du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -705,6 +691,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
 
+		# Partie de la condition d'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -725,6 +712,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de condition pour l'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -745,6 +733,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = input("Entrez votre numéro de téléphone : ")
 
+		# Partie de condition pour l'acception du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
@@ -765,6 +754,7 @@ def choix_place_abonnement(place_one, choix_abonne, choix_abonne_name): # Teste 
 		pseudo = input("Entrez votre pseudo : ")
 		numero_tel = eval(input("Entrez votre numéro de téléphone : "))
 
+		# Partie de condition d'acceptation du numéro de téléphone
 		if type(numero_tel) == str:
 			if int(numero_tel) == int:
 				# Création du ticket et de son impression
